@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>jahia-packages-parent</artifactId>
+        <groupId>org.jahia.packages</groupId>
+        <version>8.0.0.0</version>
+    </parent>
+    <artifactId>package-template</artifactId>
+    <name>Package Template</name>
+    <version>1.0.0</version>
+    <description>This project package some modules</description>
+    <packaging>pom</packaging>
+    <properties>
+        <jahia.final.package.name>package-template</jahia.final.package.name>
+        <jahia.manifest.package.id>package-template</jahia.manifest.package.id>
+        <jahia.manifest.description>my-module, another-module</jahia.manifest.description>
+        <jahia.package.sources.assembly.file>src/main/assembly/dependencies-sources.xml</jahia.package.sources.assembly.file>
+        <jahia.package.assembly.file>src/main/assembly/dependencies.xml</jahia.package.assembly.file>
+    </properties>
+    <repositories>
+        <repository>
+            <id>jahia-public</id>
+            <name>Jahia Public Repository</name>
+            <url>https://devtools.jahia.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.jahia.modules</groupId>
+            <artifactId>my-module</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.foo.modules</groupId>
+            <artifactId>another-module</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${dependency.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies-sources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.jahia.modules,org.foo.modules</includeGroupIds>
+                            <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                            <classifier>sources</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.jahia.modules,org.foo.modules</includeGroupIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
